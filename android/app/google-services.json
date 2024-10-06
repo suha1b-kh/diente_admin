@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "312200157189",
+    "project_id": "diente-e540a",
+    "storage_bucket": "diente-e540a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312200157189:android:ea7ed3568235292effe46c",
+        "android_client_info": {
+          "package_name": "com.diente"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACNVyBzYP0Uw8BkpVjtrx1dtxclJ_AT2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312200157189:android:0fd3a0c12741ff2fffe46c",
+        "android_client_info": {
+          "package_name": "com.e"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACNVyBzYP0Uw8BkpVjtrx1dtxclJ_AT2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312200157189:android:69ac22afcd1cc78fffe46c",
+        "android_client_info": {
+          "package_name": "com.example.diente"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACNVyBzYP0Uw8BkpVjtrx1dtxclJ_AT2M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
