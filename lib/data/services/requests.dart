@@ -4,18 +4,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diente_admin/data/models/request.dart';
 
 final FirebaseFirestore db = FirebaseFirestore.instance;
-
 Future<List<RequestModel>> fetchAllRequests() async {
-  List<RequestModel> studentsList = [];
+  List<RequestModel> requestsList = [];
   try {
     QuerySnapshot querySnapshot = await db.collection('requests').get();
     for (var doc in querySnapshot.docs) {
-      studentsList
+      requestsList
           .add(RequestModel.fromJson(doc.data() as Map<String, dynamic>));
     }
-    log(studentsList.toString());
+    log(requestsList.toString());
   } catch (e) {
-    log("Error fetching students: $e");
+    if (e is FirebaseException) {
+      log("FirebaseException: ${e.message}");
+    } else {
+      log("Error fetching requests: $e");
+    }
   }
-  return studentsList;
+  return requestsList;
 }

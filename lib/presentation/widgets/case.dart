@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:diente_admin/core/text.dart';
 import 'package:diente_admin/data/models/request.dart';
+import 'package:diente_admin/data/models/student.dart';
+import 'package:diente_admin/data/services/requests.dart';
+import 'package:diente_admin/data/services/students.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -37,7 +42,7 @@ Widget CaseWidget(context, String requestName) {
               ),
               Gap(10.w),
               IconButton(
-                onPressed: () {
+                onPressed: () async {
                   //TODO: reject request
                 },
                 icon: Icon(
