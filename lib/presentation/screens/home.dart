@@ -3,13 +3,14 @@
 import 'dart:developer';
 
 import 'package:diente_admin/core/text.dart';
+import 'package:diente_admin/data/models/request.dart';
 import 'package:diente_admin/data/models/student.dart';
+import 'package:diente_admin/data/services/requests.dart';
 import 'package:diente_admin/data/services/students.dart';
 import 'package:diente_admin/presentation/widgets/case.dart';
 import 'package:diente_admin/presentation/widgets/student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
@@ -34,10 +35,30 @@ class AdminHomeScreen extends StatelessWidget {
                   Expanded(
                     child: Container(
                       width: 433.w,
-                      child: ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return CaseWidget(context, 'Routine examination');
+                      child: FutureBuilder<List<RequestModel>>(
+                        future: fetchAllRequests(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
+                            return const Center(child: Text('No cases found'));
+                          } else {
+                            List<RequestModel> requests = snapshot.data!;
+                            return ListView.builder(
+                              itemCount: requests.length,
+                              itemBuilder: (context, index) {
+                                return CaseWidget(
+                                  request: requests[index],
+                                );
+                              },
+                            );
+                          }
                         },
                       ),
                     ),

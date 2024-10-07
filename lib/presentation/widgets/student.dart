@@ -27,9 +27,9 @@ Widget StudentWidget(context, StudentModel student) {
               padding: EdgeInsets.all(18.w),
               child: CircleAvatar(
                 radius: 50.r,
-                backgroundImage: NetworkImage(student.imageUrl
-                    // 'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'),
-                    ),
+                // backgroundImage: NetworkImage(student.imageUrl
+                //     // 'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'),
+                //     ),
               ),
             ),
             Gap(10.w),
