@@ -7,7 +7,10 @@ final FirebaseFirestore db = FirebaseFirestore.instance;
 Future<List<RequestModel>> fetchAllRequests() async {
   List<RequestModel> requestsList = [];
   try {
-    QuerySnapshot querySnapshot = await db.collection('requests').get();
+    QuerySnapshot querySnapshot = await db
+        .collection('requests')
+        .where('isAccepted', isEqualTo: 'null')
+        .get();
     for (var doc in querySnapshot.docs) {
       requestsList
           .add(RequestModel.fromJson(doc.data() as Map<String, dynamic>));
@@ -37,9 +40,6 @@ Future<void> acceptCase(RequestModel req) async {
   }
 
   try {
-    await requestsCollection.doc(id).update({'isAccepted': true});
-    log('Success');
-
     Map<String, dynamic> acceptedCase = {
       'patientId': id,
       'caseDescription': req.caseDescription,
