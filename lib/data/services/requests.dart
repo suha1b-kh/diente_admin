@@ -7,10 +7,7 @@ final FirebaseFirestore db = FirebaseFirestore.instance;
 Future<List<RequestModel>> fetchAllRequests() async {
   List<RequestModel> requestsList = [];
   try {
-    QuerySnapshot querySnapshot = await db
-        .collection('requests')
-        .where('isAccepted', isEqualTo: 'null')
-        .get();
+    QuerySnapshot querySnapshot = await db.collection('requests').get();
     for (var doc in querySnapshot.docs) {
       requestsList
           .add(RequestModel.fromJson(doc.data() as Map<String, dynamic>));
@@ -34,19 +31,25 @@ final CollectionReference acceptedRequestsCollection =
 
 Future<void> acceptCase(RequestModel req) async {
   final String? id = req.id;
+  log('ee $id');
   if (id == null || id.isEmpty) {
     log('Invalid document ID');
+
     return;
   }
 
   try {
-    Map<String, dynamic> acceptedCase = {
+    log('Success');
+
+    Map<String, dynamic> acceptedRequest = {
       'patientId': id,
       'caseDescription': req.caseDescription,
       'caseStatus': 'Waiting'
     };
 
-    await acceptedRequestsCollection.doc(id).set(acceptedCase);
+    await acceptedRequestsCollection.doc(id).set(acceptedRequest);
+    await requestsCollection.doc(id).delete();
+
     log("Case Added");
   } catch (error) {
     log("Failed to accept case: $error");

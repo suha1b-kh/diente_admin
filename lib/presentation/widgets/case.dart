@@ -56,7 +56,6 @@ class _CaseWidgetState extends State<CaseWidget> {
                     setState(() {
                       try {
                         acceptCase(widget.request);
-                        log('accepted');
                       } on Exception catch (e) {
                         log(e.toString());
                       }
