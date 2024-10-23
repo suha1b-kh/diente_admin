@@ -44,7 +44,7 @@ Future<void> acceptCase(RequestModel req) async {
     Map<String, dynamic> acceptedRequest = {
       'patientId': id,
       'caseDescription': req.caseDescription,
-      'caseStatus': 'Waiting'
+      'caseStatus': 'accepted'
     };
 
     await acceptedRequestsCollection.doc(id).set(acceptedRequest);
