@@ -1,1 +1,36 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"diente-e540a","appId":"1:312200157189:android:0fd3a0c12741ff2fffe46c","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"diente-e540a","configurations":{"android":"1:312200157189:android:0fd3a0c12741ff2fffe46c","ios":"1:312200157189:ios:c4f51ed39c1843c0ffe46c","macos":"1:312200157189:ios:c4f51ed39c1843c0ffe46c","web":"1:312200157189:web:680811c1a4722470ffe46c","windows":"1:312200157189:web:5de7a02f05c84470ffe46c"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "diente-e540a",
+          "appId": "1:312200157189:android:0fd3a0c12741ff2fffe46c",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "diente-e540a",
+          "configurations": {
+            "android": "1:312200157189:android:0fd3a0c12741ff2fffe46c",
+            "ios": "1:312200157189:ios:c4f51ed39c1843c0ffe46c",
+            "macos": "1:312200157189:ios:c4f51ed39c1843c0ffe46c",
+            "web": "1:312200157189:web:680811c1a4722470ffe46c",
+            "windows": "1:312200157189:web:5de7a02f05c84470ffe46c"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "frameworksBackend": {
+      "region": "europe-west1"
+    }
+  }
+}

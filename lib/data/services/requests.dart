@@ -4,6 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diente_admin/data/models/request.dart';
 
 final FirebaseFirestore db = FirebaseFirestore.instance;
+
+Stream<List<RequestModel>> getRequestsStream() {
+  return db.collection('requests').snapshots().map((snapshot) {
+    return snapshot.docs.map((doc) {
+      return RequestModel.fromJson(doc.data());
+    }).toList();
+  });
+}
+
 Future<List<RequestModel>> fetchAllRequests() async {
   List<RequestModel> requestsList = [];
   try {
@@ -20,6 +29,8 @@ Future<List<RequestModel>> fetchAllRequests() async {
       log("Error fetching requests: $e");
     }
   }
+  log('count: ${requestsList.length.toString()}');
+
   return requestsList;
 }
 // Accept or reject a request

@@ -19,7 +19,7 @@ class StudentModel {
       id: json['id'] ?? 'error',
       year: json['year'] ?? 'error',
       email: json['email'] ?? 'error',
-      imageUrl: json['imageUrl'] ?? 'error',
+      imageUrl: json['profilePic'] ?? 'error',
     );
   }
 }

@@ -25,7 +25,7 @@ class _CaseWidgetState extends State<CaseWidget> {
         height: 300.w,
         width: 433.w,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.inverseSurface,
+          color: const Color(0xFFF2F4F7),
           borderRadius: BorderRadius.circular(15.w),
         ),
         child: Column(
@@ -35,7 +35,7 @@ class _CaseWidgetState extends State<CaseWidget> {
               child: customText(
                   context,
                   widget.request.caseDescription?['Name'] ?? 'no request name',
-                  Theme.of(context).colorScheme.primary,
+                  const Color(0xFF1B2A57),
                   24.sp,
                   FontWeight.w500),
             ),
@@ -52,14 +52,12 @@ class _CaseWidgetState extends State<CaseWidget> {
                 IconButton(
                   onPressed: () {
                     //TODO: accept request
-
-                    setState(() {
-                      try {
-                        acceptCase(widget.request);
-                      } on Exception catch (e) {
-                        log(e.toString());
-                      }
-                    });
+                    try {
+                      acceptCase(widget.request);
+                    } on Exception catch (e) {
+                      log(e.toString());
+                    }
+                    setState(() {});
                   },
                   icon: Icon(
                     Icons.check_circle,
@@ -70,15 +68,14 @@ class _CaseWidgetState extends State<CaseWidget> {
                 Gap(10.w),
                 IconButton(
                   onPressed: () async {
+                    try {
+                      rejectCase(widget.request);
+                      log('rejected');
+                    } on Exception catch (e) {
+                      log(e.toString());
+                    }
                     //TODO: reject request
-                    setState(() {
-                      try {
-                        rejectCase(widget.request);
-                        log('rejected');
-                      } on Exception catch (e) {
-                        log(e.toString());
-                      }
-                    });
+                    setState(() {});
                   },
                   icon: Icon(
                     Icons.cancel,

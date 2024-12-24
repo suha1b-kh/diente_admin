@@ -18,7 +18,7 @@ Widget StudentWidget(context, StudentModel student) {
         height: 200.w,
         width: 433.w,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.inverseSurface,
+          color: const Color(0xFFF2F4F7),
           borderRadius: BorderRadius.circular(15.w),
         ),
         child: Column(
@@ -27,9 +27,15 @@ Widget StudentWidget(context, StudentModel student) {
               padding: EdgeInsets.all(18.w),
               child: CircleAvatar(
                 radius: 50.r,
-                // backgroundImage: NetworkImage(student.imageUrl
-                //     // 'https://www.pngkey.com/png/full/114-1149878_setting-user-avatar-in-specific-size-without-breaking.png'),
-                //     ),
+                backgroundColor: const Color(0xFF1B2A57),
+                child: Text(
+                  student.name.split(' ').map((e) => e[0].toUpperCase()).join(),
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
             Gap(10.w),
@@ -37,26 +43,14 @@ Widget StudentWidget(context, StudentModel student) {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                customText(
-                    context,
-                    student.name,
-                    Theme.of(context).colorScheme.primary,
-                    24.sp,
-                    FontWeight.w500),
+                customText(context, student.name, const Color(0xFF1B2A57),
+                    24.sp, FontWeight.w500),
                 Gap(20.w),
-                customText(
-                    context,
-                    student.year,
-                    Theme.of(context).colorScheme.primary,
-                    20.sp,
-                    FontWeight.w400),
+                customText(context, student.year, const Color(0xFF1B2A57),
+                    20.sp, FontWeight.w400),
               ],
             ),
-            customText(
-                context,
-                student.email,
-                Theme.of(context).colorScheme.secondary,
-                18.sp,
+            customText(context, student.email, const Color(0xFF7CA0CA), 18.sp,
                 FontWeight.w400),
           ],
         ),
