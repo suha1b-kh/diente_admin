@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:diente_admin/data/services/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -30,7 +31,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _loadDashboardData() async {
     try {
-      // Use Future.wait to fetch data concurrently
       final results = await Future.wait([
         DashboardServices().getStudentsCount(),
         DashboardServices().getAcceptedRequestsCount(),
@@ -40,7 +40,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         DashboardServices().countCasesByStatus('accepted'),
       ]);
 
-      // Assign results to respective variables
       _studentsCount = results[0] as int?;
       _acceptedRequestsCount = results[1] as int?;
       _problemsCount = results[2] as int?;
@@ -48,7 +47,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _activeCasesCount = results[4] as int?;
       _acceptedCasesCount = results[5] as int?;
     } catch (e) {
-      // Handle errors if needed
       log('Error loading dashboard data: $e');
     } finally {
       setState(() {
@@ -75,27 +73,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
               height: 300,
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : Expanded(
-                      child: GridView.count(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 50,
-                        childAspectRatio: 3.5,
-                        shrinkWrap: true,
-                        children: [
-                          _buildDashboardCard(
-                              'Students', _studentsCount.toString()),
-                          _buildDashboardCard('Accepted Requests',
-                              _acceptedRequestsCount.toString()),
-                          _buildDashboardCard(
-                              'Problems', _problemsCount.toString()),
-                          _buildDashboardCard(
-                              'Patients', _patientsCount.toString()),
-                          _buildDashboardCard(
-                              'Active Cases', _activeCasesCount.toString()),
-                          _buildDashboardCard(
-                              'Accepted Cases', _acceptedCasesCount.toString()),
+                  : BarChart(
+                      BarChartData(
+                        barGroups: [
+                          _buildBarChartGroup('Students', _studentsCount),
+                          _buildBarChartGroup(
+                              'Accepted Requests', _acceptedRequestsCount),
+                          _buildBarChartGroup('Problems', _problemsCount),
+                          _buildBarChartGroup('Patients', _patientsCount),
+                          _buildBarChartGroup(
+                              'Active Cases', _activeCasesCount),
+                          _buildBarChartGroup(
+                              'Accepted Cases', _acceptedCasesCount),
                         ],
+                        titlesData: FlTitlesData(
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: true),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: true),
+                          ),
+                        ),
+                        borderData: FlBorderData(show: true),
+                        barTouchData: BarTouchData(enabled: false),
                       ),
                     ),
             ),
@@ -108,7 +108,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   labelText: 'Enter Email',
                   border: OutlineInputBorder(),
                 ),
-                onChanged: (value) {},
               ),
             ),
             const SizedBox(height: 20),
@@ -186,26 +185,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildDashboardCard(String title, String value) {
-    return Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              value,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
+  BarChartGroupData _buildBarChartGroup(String title, int? value) {
+    return BarChartGroupData(
+      x: title.hashCode, // Unique identifier for each bar
+      barRods: [
+        BarChartRodData(
+          toY: value?.toDouble() ?? 0,
+          color: Colors.blue,
         ),
-      ),
+      ],
     );
   }
 }
