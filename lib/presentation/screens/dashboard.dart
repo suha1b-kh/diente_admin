@@ -30,17 +30,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _loadDashboardData() async {
     try {
-      _studentsCount = await DashboardServices().getStudentsCount();
-      _acceptedRequestsCount =
-          await DashboardServices().getAcceptedRequestsCount();
-      _problemsCount = await DashboardServices().getProblemsCount();
-      _patientsCount = await DashboardServices().getPatientsCount();
-      _activeCasesCount =
-          await DashboardServices().countCasesByStatus('active');
-      _acceptedCasesCount =
-          await DashboardServices().countCasesByStatus('accepted');
+      // Use Future.wait to fetch data concurrently
+      final results = await Future.wait([
+        DashboardServices().getStudentsCount(),
+        DashboardServices().getAcceptedRequestsCount(),
+        DashboardServices().getProblemsCount(),
+        DashboardServices().getPatientsCount(),
+        DashboardServices().countCasesByStatus('active'),
+        DashboardServices().countCasesByStatus('accepted'),
+      ]);
+
+      // Assign results to respective variables
+      _studentsCount = results[0] as int?;
+      _acceptedRequestsCount = results[1] as int?;
+      _problemsCount = results[2] as int?;
+      _patientsCount = results[3] as int?;
+      _activeCasesCount = results[4] as int?;
+      _acceptedCasesCount = results[5] as int?;
     } catch (e) {
-      // Handle error if needed
+      // Handle errors if needed
       log('Error loading dashboard data: $e');
     } finally {
       setState(() {

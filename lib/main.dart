@@ -28,9 +28,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       builder: (context, widget) {
         ScreenUtil.init(context, designSize: const Size(1920, 1280));
-        return AdminHomeScreen();
+        return const AdminHomeScreen();
       },
       theme: lightMode,
     );
