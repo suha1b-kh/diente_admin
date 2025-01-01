@@ -1,7 +1,13 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diente_admin/data/services/dashboard.dart';
+import 'package:diente_admin/presentation/screens/accepted_case.dart';
+import 'package:diente_admin/presentation/screens/all_requests.dart';
+import 'package:diente_admin/presentation/screens/active_case.dart';
+import 'package:diente_admin/presentation/screens/patient_screen.dart';
+import 'package:diente_admin/presentation/screens/student_screen.dart';
+import 'package:diente_admin/presentation/screens/waiting_requests.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -17,7 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   int? _studentsCount;
   int? _acceptedRequestsCount;
-  int? _problemsCount;
+  int? _requestsCount; // New variable for requests count
   int? _patientsCount;
   int? _activeCasesCount;
   int? _acceptedCasesCount;
@@ -34,18 +40,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
       final results = await Future.wait([
         DashboardServices().getStudentsCount(),
         DashboardServices().getAcceptedRequestsCount(),
-        DashboardServices().getProblemsCount(),
+        DashboardServices().getRequestsCount(), // Fetch requests count
         DashboardServices().getPatientsCount(),
         DashboardServices().countCasesByStatus('active'),
         DashboardServices().countCasesByStatus('accepted'),
       ]);
 
-      _studentsCount = results[0] as int?;
-      _acceptedRequestsCount = results[1] as int?;
-      _problemsCount = results[2] as int?;
-      _patientsCount = results[3] as int?;
-      _activeCasesCount = results[4] as int?;
-      _acceptedCasesCount = results[5] as int?;
+      _studentsCount = results[0];
+      _acceptedRequestsCount = results[1];
+      _requestsCount = results[2];
+      _patientsCount = results[3];
+      _activeCasesCount = results[4];
+      _acceptedCasesCount = results[5];
     } catch (e) {
       log('Error loading dashboard data: $e');
     } finally {
@@ -73,29 +79,87 @@ class _DashboardScreenState extends State<DashboardScreen> {
               height: 300,
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : BarChart(
-                      BarChartData(
-                        barGroups: [
-                          _buildBarChartGroup('Students', _studentsCount),
-                          _buildBarChartGroup(
-                              'Accepted Requests', _acceptedRequestsCount),
-                          _buildBarChartGroup('Problems', _problemsCount),
-                          _buildBarChartGroup('Patients', _patientsCount),
-                          _buildBarChartGroup(
-                              'Active Cases', _activeCasesCount),
-                          _buildBarChartGroup(
-                              'Accepted Cases', _acceptedCasesCount),
+                  : Expanded(
+                      child: GridView.count(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 50,
+                        childAspectRatio: 3.5,
+                        shrinkWrap: true,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MyStudentsScreen()),
+                              );
+                            },
+                            child: _buildDashboardCard(
+                                'Students', _studentsCount.toString()),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AcceptedRequestsScreen()),
+                              );
+                            },
+                            child: _buildDashboardCard(
+                                'All Cases', _acceptedRequestsCount.toString()),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const WaitingRequestsScreen()),
+                              );
+                            },
+                            child: _buildDashboardCard(
+                                'Waiting Requests', _requestsCount.toString()),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MyPatientsScreen()),
+                              );
+                            },
+                            child: _buildDashboardCard(
+                                'Patients', _patientsCount.toString()),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ActiveCaseScreen()),
+                              );
+                            },
+                            child: _buildDashboardCard(
+                                'Active Cases', _activeCasesCount.toString()),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AcceptedCaseScreen()),
+                              );
+                            },
+                            child: _buildDashboardCard('Accepted Cases',
+                                _acceptedCasesCount.toString()),
+                          ),
                         ],
-                        titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: true),
-                          ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: true),
-                          ),
-                        ),
-                        borderData: FlBorderData(show: true),
-                        barTouchData: BarTouchData(enabled: false),
                       ),
                     ),
             ),
@@ -108,6 +172,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   labelText: 'Enter Email',
                   border: OutlineInputBorder(),
                 ),
+                onChanged: (value) {},
               ),
             ),
             const SizedBox(height: 20),
@@ -185,15 +250,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  BarChartGroupData _buildBarChartGroup(String title, int? value) {
-    return BarChartGroupData(
-      x: title.hashCode, // Unique identifier for each bar
-      barRods: [
-        BarChartRodData(
-          toY: value?.toDouble() ?? 0,
-          color: Colors.blue,
+  Widget _buildDashboardCard(String title, String value) {
+    return Card(
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              value,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

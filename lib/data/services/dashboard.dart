@@ -91,6 +91,16 @@ class DashboardServices {
     }
   }
 
+  Future<int?> getRequestsCount() async {
+    try {
+      QuerySnapshot snapshot = await _firestore.collection('requests').get();
+      return snapshot.docs.length; // Return the count of documents
+    } catch (e) {
+      print('Error fetching requests count: $e');
+      return null;
+    }
+  }
+
   /// Get the student ID by email
   Future<String?> getStudentIdByEmail(String email) async {
     try {
